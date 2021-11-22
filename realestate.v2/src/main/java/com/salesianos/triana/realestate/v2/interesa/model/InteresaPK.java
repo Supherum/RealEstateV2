@@ -14,5 +14,5 @@ import java.io.Serializable;
 public class InteresaPK implements Serializable {
 
     private Long vivienda_id;
-    private Long interesado_id;
+    private Long usuario_id;
 }
