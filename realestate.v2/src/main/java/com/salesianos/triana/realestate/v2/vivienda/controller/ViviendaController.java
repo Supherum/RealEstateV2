@@ -14,6 +14,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,5 +66,23 @@ public class ViviendaController {
         v.addUsuarioToVivienda(p);
         viviendaService.save(v);
         return ResponseEntity.status(HttpStatus.CREATED).body(viviendaDetalleDtoConverter.viviendaToDetalleDto(v));
+    }
+
+    @Operation(summary = "Devuelve la lista de viviendas paginada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado las 9 primeras viviendas por defecto",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra la lista de viviendas",
+                    content = @Content)
+    })
+    @GetMapping ("/")
+    public ResponseEntity<?> getAllViviendas ( @PageableDefault(size = 9,page = 0) Pageable pageable){
+        Page<Vivienda> lista=viviendaService.findAll(pageable);
+        if(lista.isEmpty())
+            return ResponseEntity.notFound().build();
+        Page<ViviendaListaDto> dtoLista= lista.map(x->viviendaListaDtoConverter.viviendaToViviendaListaDto(x));
+        return ResponseEntity.ok(dtoLista);
     }
 }

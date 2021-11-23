@@ -20,9 +20,9 @@ public class MainFake {
 
 
     @PostConstruct
-    public void mainFake(){
+    public void mainFake() {
 
-        UserRegisterDto u= UserRegisterDto.builder()
+        UserRegisterDto u = UserRegisterDto.builder()
                 .password("admin")
                 .nick("admin")
                 .nombre("Juan")
@@ -33,12 +33,6 @@ public class MainFake {
 
         authService.saveUsuario(u, Rol.Administrador);
 
-        viviendaService.save(
-        Vivienda.builder()
-                .direccion("calle")
-                .tieneAscensor(true)
-                .tipo(Type.Obra_Nueva)
-                .build());
     }
 
 
