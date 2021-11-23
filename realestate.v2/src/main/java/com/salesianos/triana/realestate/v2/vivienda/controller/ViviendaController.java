@@ -68,6 +68,7 @@ public class ViviendaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(viviendaDetalleDtoConverter.viviendaToDetalleDto(v));
     }
 
+    // paginado
     @Operation(summary = "Devuelve la lista de viviendas paginada")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -84,5 +85,6 @@ public class ViviendaController {
             return ResponseEntity.notFound().build();
         Page<ViviendaListaDto> dtoLista= lista.map(x->viviendaListaDtoConverter.viviendaToViviendaListaDto(x));
         return ResponseEntity.ok(dtoLista);
+
     }
 }
