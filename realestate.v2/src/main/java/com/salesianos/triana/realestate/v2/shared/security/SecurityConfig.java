@@ -6,7 +6,6 @@ import com.salesianos.triana.realestate.v2.shared.security.jwt.FiltroSeguridad;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -26,7 +26,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     private final Autenticacion autenticacion;
     private final Autorizacion autorizacion;
 
-    private final PasswordCodifier passwordCodifier;
+    private final PasswordEncoder codificador;
     private final UserDetailsService userDetailsService;
 
     private final FiltroSeguridad filtroSeguridad;
@@ -42,7 +42,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordCodifier.passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(codificador);
     }
 
 
@@ -61,10 +61,8 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/producto/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/auth/**").anonymous()
                 .antMatchers("/h2-console/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
         http.addFilterBefore(filtroSeguridad, UsernamePasswordAuthenticationFilter.class);
 
