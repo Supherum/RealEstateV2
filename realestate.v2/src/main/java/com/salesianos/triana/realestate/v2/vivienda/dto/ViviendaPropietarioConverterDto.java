@@ -1,11 +1,18 @@
 package com.salesianos.triana.realestate.v2.vivienda.dto;
 
+import com.salesianos.triana.realestate.v2.usuario.model.Rol;
 import com.salesianos.triana.realestate.v2.usuario.model.Usuario;
 import com.salesianos.triana.realestate.v2.vivienda.model.Vivienda;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ViviendaPropietarioConverterDto {
+
+     @Autowired
+     private PasswordEncoder codifcador;
+
 
     public ViviendaPropietarioDto viviendaToViviendaPropietarioDto (Vivienda v){
         return ViviendaPropietarioDto.builder()
@@ -67,6 +74,9 @@ public class ViviendaPropietarioConverterDto {
                 .email(dto.getEmail())
                 .telefono(dto.getTelefono())
                 .avatar(dto.getAvatarPropietario())
+                .rol(Rol.Propietario)
+                .nick(dto.getNick())
+                .password(codifcador.encode(dto.getPassword()))
                 .build();
     }
 }

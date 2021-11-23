@@ -3,9 +3,11 @@ package com.salesianos.triana.realestate.v2.shared.security;
 import com.salesianos.triana.realestate.v2.shared.security.jwt.Autenticacion;
 import com.salesianos.triana.realestate.v2.shared.security.jwt.Autorizacion;
 import com.salesianos.triana.realestate.v2.shared.security.jwt.FiltroSeguridad;
+import com.salesianos.triana.realestate.v2.usuario.model.Rol;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -62,6 +64,11 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/register/propietario").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/register/gestor").hasRole("Administrador")
+                .antMatchers(HttpMethod.POST, "/auth/register/administrador").hasRole("Administrador")
+                .antMatchers(HttpMethod.POST, "/vivienda/").permitAll()
+                .antMatchers(HttpMethod.GET, "/propietario/").authenticated()
                 .anyRequest().permitAll();
 
         http.addFilterBefore(filtroSeguridad, UsernamePasswordAuthenticationFilter.class);
