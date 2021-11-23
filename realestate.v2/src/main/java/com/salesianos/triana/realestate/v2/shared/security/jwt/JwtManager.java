@@ -40,7 +40,7 @@ public class JwtManager {
     }
 
     // Busca al Usuario por su ID
-    public UUID findUserByUUID (String token) {
+    public UUID findUsuarioByUUID (String token) {
         return UUID.fromString(parser.parseClaimsJws(token).getBody().getSubject());
     }
 

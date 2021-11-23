@@ -38,7 +38,7 @@ public class FiltroSeguridad extends OncePerRequestFilter {
             if (StringUtils.hasText(token) && jwtManager.validateToken(token)) {
 
                 //Long userId = jwtProvider.getUserIdFromJwt(token);
-                UUID userId = jwtManager.findUserByUUID(token);
+                UUID userId = jwtManager.findUsuarioByUUID(token);
 
                 Optional<Usuario> optionalUser = authService.findById(userId);
 

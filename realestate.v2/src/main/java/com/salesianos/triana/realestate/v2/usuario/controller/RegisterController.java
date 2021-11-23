@@ -8,8 +8,10 @@ import com.salesianos.triana.realestate.v2.usuario.model.Usuario;
 import com.salesianos.triana.realestate.v2.usuario.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
