@@ -33,7 +33,7 @@ public class AuthService extends BaseService<Usuario, UUID, UsuarioRepository> i
 
 
 
-    // Crea un nuevo Usuario "Propietario"
+    // Crea un nuevo Usuario
     public Usuario saveUsuario(UserRegisterDto dto, Rol rol){
         if(dto.getPassword().contentEquals(dto.getPassword2()) ||
                 dto.getApellidos()!=null ||

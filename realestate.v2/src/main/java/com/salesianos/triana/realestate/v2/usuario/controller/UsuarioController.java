@@ -22,4 +22,5 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.findPropietarios());
     }
 
+
 }

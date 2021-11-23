@@ -23,15 +23,15 @@ public class MainFake {
     public void mainFake(){
 
         UserRegisterDto u= UserRegisterDto.builder()
-                .password("XD")
-                .nick("Pepe")
+                .password("admin")
+                .nick("admin")
                 .nombre("Juan")
                 .apellidos("Ramirez")
                 .email("pepe@juan")
-                .password2("XD")
+                .password2("admin")
                 .build();
 
-        authService.saveUsuario(u, Rol.Propietario);
+        authService.saveUsuario(u, Rol.Administrador);
 
         viviendaService.save(
         Vivienda.builder()
