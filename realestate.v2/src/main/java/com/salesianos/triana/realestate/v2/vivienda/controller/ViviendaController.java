@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,8 +22,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+import java.util.UUID;
 
-
+@Log
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/vivienda")
@@ -84,5 +87,24 @@ public class ViviendaController {
             return ResponseEntity.notFound().build();
         Page<ViviendaListaDto> dtoLista= lista.map(x->viviendaListaDtoConverter.viviendaToViviendaListaDto(x));
         return ResponseEntity.ok(dtoLista);
+    }
+
+    @Operation(summary = "Devuelve el detalle en forma de Dto de un propietario y su vivienda")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha encontrado la vivienda y su propietario",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra la vivienda o el propietario",
+                    content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ViviendaPropietarioDto> getDetallesViviendasPropietario(@PathVariable ("id") UUID id){
+        final Optional<Vivienda> v=viviendaService.findById(id);
+        log.info(id.toString());
+
+        if(v.isEmpty() || v.get().getUsuario()==null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().body(viviendaPropietarioConverterDto.viviendaToViviendaPropietarioDto(viviendaService.findById(id).get()));
     }
 }
