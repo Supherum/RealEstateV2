@@ -12,6 +12,6 @@ import java.util.UUID;
 public interface InteresaRepository extends JpaRepository<Interesa, InteresaPK> {
 
     @Query("select i from Interesa i where vivienda_id=:iden")
-    public List<Interesa> allInteresaDeUnaVivienda (@Param("iden")Long iden);
+    public List<Interesa> allInteresaDeUnaVivienda (@Param("iden")UUID iden);
 
 }

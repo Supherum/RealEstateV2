@@ -2,6 +2,7 @@ package com.salesianos.triana.realestate.v2.vivienda.controller;
 
 import com.salesianos.triana.realestate.v2.inmobiliaria.model.Inmobiliaria;
 import com.salesianos.triana.realestate.v2.inmobiliaria.service.InmobiliariaService;
+import com.salesianos.triana.realestate.v2.interesa.model.Interesa;
 import com.salesianos.triana.realestate.v2.interesa.service.InteresaService;
 import com.salesianos.triana.realestate.v2.interesa.dto.InteresaDtoConverter;
 import com.salesianos.triana.realestate.v2.usuario.model.Rol;
@@ -24,8 +25,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -209,6 +212,34 @@ public class ViviendaController {
         else{
             v.get().remoceInmobiliariaToVivienda(v.get().getInmobiliaria());
             viviendaService.edit(v.get());
+            return ResponseEntity.ok().build();
+        }
+    }
+
+
+    @Operation(summary = "Borra un interés de una vivienda y la vivienda pero no su interesado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha borrado correctamente",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra la vivienda",
+                    content = @Content)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteViviendaAndIntereses (@PathVariable ("id") UUID id, @AuthenticationPrincipal Usuario u){
+
+        Optional<Vivienda> v=viviendaService.findById(id);
+
+        if( v.isEmpty())
+            return ResponseEntity.notFound().build();
+        if(!u.getId().equals(v.get().getUsuario().getId()) && u.getRol()!= Rol.Administrador)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        else {
+
+            List<Interesa> listaInteresa= interesaService.allInteresaDeUnaVivienda(id);
+            interesaService.deleteAll(listaInteresa);
+            viviendaService.deleteById(id);
             return ResponseEntity.ok().build();
         }
     }

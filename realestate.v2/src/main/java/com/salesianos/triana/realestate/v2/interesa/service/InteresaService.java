@@ -10,13 +10,14 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class InteresaService extends BaseService<Interesa, InteresaPK, InteresaRepository> {
 
     @Autowired
     InteresaRepository interesaRepository;
-    public List<Interesa> allInteresaDeUnaVivienda(Long id){
+    public List<Interesa> allInteresaDeUnaVivienda(UUID id){
         return interesaRepository.allInteresaDeUnaVivienda(id);
     }
 
