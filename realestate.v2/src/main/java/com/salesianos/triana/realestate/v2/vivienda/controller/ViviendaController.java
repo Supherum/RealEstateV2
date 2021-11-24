@@ -105,7 +105,7 @@ public class ViviendaController {
     @GetMapping("/{id}")
     public ResponseEntity<ViviendaPropietarioDto> getDetallesViviendasPropietario(@PathVariable ("id") UUID id){
         final Optional<Vivienda> v=viviendaService.findById(id);
-        log.info(id.toString());
+
 
         if(v.isEmpty() || v.get().getUsuario()==null)
             return ResponseEntity.notFound().build();
@@ -178,5 +178,40 @@ public class ViviendaController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
     }
+
+
+    @Operation(summary = "Borras la asociación de una inmobiliaria con una vivienda")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha ejecutado correctamente",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra la vivienda",
+                    content = @Content)
+    })
+    @DeleteMapping("/{id}/inmobiliaria")
+    public ResponseEntity<?> desasociarViviendaInmobiliaria (@PathVariable ("id") UUID id, @AuthenticationPrincipal Usuario u){
+
+        Optional<Vivienda> v = viviendaService.findById(id);
+        Boolean isGestor=false;
+
+        if(v.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        // Comprueba si es el gestor de dicha inmobiliaria
+        if(u.getInmobiliaria()!=null){
+           if(v.get().getInmobiliaria().getId().equals(u.getInmobiliaria().getId()))
+               isGestor=true;
+        }
+
+        if(!u.getId().equals(v.get().getUsuario().getId()) && u.getRol()!= Rol.Administrador && !isGestor)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        else{
+            v.get().remoceInmobiliariaToVivienda(v.get().getInmobiliaria());
+            viviendaService.edit(v.get());
+            return ResponseEntity.ok().build();
+        }
+    }
+
 }
 
