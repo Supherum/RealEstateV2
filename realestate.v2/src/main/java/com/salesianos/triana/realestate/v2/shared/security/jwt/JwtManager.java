@@ -22,7 +22,7 @@ public class JwtManager {
     public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
 
-    @Value("${jwt.secret:elsecretoibericoeselquemasmegusta}")
+    @Value("${jwt.secret:tenerqueponerunafraselargaparaquefuncionenomegusta}")
     private String jwtSecret;
 
     @Value("${jwt.duration:43200}") // Está en segundos y equivale a 12 horas

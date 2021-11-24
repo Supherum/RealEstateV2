@@ -1,5 +1,6 @@
 package com.salesianos.triana.realestate.v2.vivienda.controller;
 
+import com.salesianos.triana.realestate.v2.inmobiliaria.model.Inmobiliaria;
 import com.salesianos.triana.realestate.v2.inmobiliaria.service.InmobiliariaService;
 import com.salesianos.triana.realestate.v2.interesa.service.InteresaService;
 import com.salesianos.triana.realestate.v2.interesa.dto.InteresaDtoConverter;
@@ -149,6 +150,32 @@ public class ViviendaController {
             viviendaService.save(v);
             return viviendaDetalleDtoConverter.viviendaToDetalleDto(v);
         }));
+        }
+    }
+
+    @Operation(summary = "Vinculas una vivienda con una inmobiliaria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha borrado correctamente",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra la vivienda",
+                    content = @Content)
+    })
+    @PostMapping("/{id}/inmobiliaria/{id2}")
+    public ResponseEntity<?> asociarViviendaInmobiliaria (@PathVariable ("id") UUID id1, @PathVariable("id2") UUID id2, @AuthenticationPrincipal Usuario u){
+        Optional<Inmobiliaria> i=inmobiliariaService.findById(id2);
+        Optional<Vivienda> v=viviendaService.findById(id1);
+
+        if(i.isEmpty() || v.isEmpty())
+            return ResponseEntity.notFound().build();
+        if(!u.getId().equals(v.get().getUsuario().getId()) && u.getRol()!= Rol.Administrador)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        else{
+            v.get().addInmobiliariaToVivienda(i.get());
+            viviendaService.edit(v.get());
+            inmobiliariaService.edit(i.get());
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
     }
 }
