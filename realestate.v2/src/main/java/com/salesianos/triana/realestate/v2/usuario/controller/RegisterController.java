@@ -69,7 +69,7 @@ public class RegisterController {
     }
 
     @PostMapping("/inmobiliaria/{id}/gestor")
-    public ResponseEntity<UserRegisterSusscesDto> nuevoAdmin (@RequestBody UserRegisterDto dto,
+    public ResponseEntity<UserRegisterSusscesDto> nuevoGestorChulo (@RequestBody UserRegisterDto dto,
                                                               @PathVariable ("id") UUID id,
                                                               @AuthenticationPrincipal Usuario p){
 

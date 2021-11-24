@@ -5,6 +5,7 @@ import com.salesianos.triana.realestate.v2.inmobiliaria.dto.GetInmobiliasDtoConv
 import com.salesianos.triana.realestate.v2.inmobiliaria.dto.InmobiliariaEscuetoDtoConverter;
 import com.salesianos.triana.realestate.v2.inmobiliaria.model.Inmobiliaria;
 import com.salesianos.triana.realestate.v2.inmobiliaria.service.InmobiliariaService;
+import com.salesianos.triana.realestate.v2.vivienda.dto.InmobiliariaViviendasDto;
 import com.salesianos.triana.realestate.v2.vivienda.dto.InmobiliariaViviendasDtoConverter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +19,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -67,4 +71,41 @@ public class InmobiliariaController {
         Page<GetInmobiliariasDto> listaDto = lista.map(i -> getInmobiliasDtoConverter.inmobiliariaToInmobiliariasDto(i));
         return ResponseEntity.ok(listaDto);
     }
+
+    @Operation(summary = "Encontrar una inmobiliaria por la id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha encontrado",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(description = "No se encuentra la Inmobiliaria",
+                    responseCode = "404",
+                    content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<InmobiliariaViviendasDto> findByIdInmoVivi(@PathVariable UUID id){
+        Optional<Inmobiliaria> i = inmobiliariaService.findById(id);
+
+        if (i.isEmpty())
+            return ResponseEntity.notFound().build();
+        InmobiliariaViviendasDto inmoVivi = inmobiliariaViviendasDtoConverter.inmobiliriaToInmoViviDto(i.get());
+
+        return ResponseEntity.ok().body(inmoVivi);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removeInmo(@PathVariable UUID id){
+        if (inmobiliariaService.findById(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else {
+
+            Inmobiliaria i = inmobiliariaService.findById(id).get();
+            //i.getViviendas().stream().map(v -> v.removeToInmobiliaria(i)).collect(Collectors.toList());
+
+            inmobiliariaService.delete(i);
+
+            return ResponseEntity.ok().build();
+        }
+    }
+
+
 }
