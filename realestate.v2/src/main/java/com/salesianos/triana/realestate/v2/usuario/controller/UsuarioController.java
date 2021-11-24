@@ -2,6 +2,7 @@ package com.salesianos.triana.realestate.v2.usuario.controller;
 
 import com.salesianos.triana.realestate.v2.shared.dto.PropietarioViendaDto;
 import com.salesianos.triana.realestate.v2.shared.dto.PropietarioViviendaDtoConverter;
+import com.salesianos.triana.realestate.v2.usuario.dto.propietario.GetPropietarioDto;
 import com.salesianos.triana.realestate.v2.usuario.dto.propietario.GetPropietarioDtoConverter;
 import com.salesianos.triana.realestate.v2.usuario.dto.propietario.PropietarioEscuetoDtoConverter;
 import com.salesianos.triana.realestate.v2.usuario.model.Rol;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Log
 @RestController
@@ -36,9 +39,9 @@ public class UsuarioController {
     private final PropietarioViviendaDtoConverter propietarioViviendaDtoConverter;
 
     @GetMapping("/propietario/")
-    public ResponseEntity<List<Usuario>> findPropietarios (){
+    public ResponseEntity<List<GetPropietarioDto>> findPropietarios (){
 
-        return ResponseEntity.ok(usuarioService.findPropietarios());
+        return ResponseEntity.ok(usuarioService.findPropietarios().stream().map(x->getPropietarioDtoConverter.propietarioToDto(x)).collect(Collectors.toList()));
     }
 
     @Operation(summary = "Devuelve los detalles de un propietario y su lista de viviendas")
@@ -63,6 +66,32 @@ public class UsuarioController {
             PropietarioViendaDto propietarioViendaDto = propietarioViviendaDtoConverter.propietarioToPropietarioVviendaDto(p.get());
             return ResponseEntity.ok().body(propietarioViendaDto);
         }
+    }
+
+
+    @Operation(summary = "Borra un propietario y sus viviendas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha borrado con exito",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra el propietario",
+                    content = @Content)
+    })
+    @DeleteMapping("/propietario/{id}")
+    public ResponseEntity<?> deletePropietario(@PathVariable("id")UUID idProp, @AuthenticationPrincipal Usuario u) {
+
+        Optional<Usuario> p = usuarioService.findById(idProp);
+
+        if(p.isEmpty())
+            return ResponseEntity.notFound().build();
+        if(!u.getId().equals(idProp) && u.getRol()!=Rol.Administrador)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        else{
+            usuarioService.deleteById(idProp);
+            return ResponseEntity.ok().build();
+        }
+
     }
 
 }
