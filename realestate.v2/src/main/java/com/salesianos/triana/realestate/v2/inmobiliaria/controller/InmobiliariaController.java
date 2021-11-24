@@ -1,4 +1,4 @@
-package com.salesianos.triana.realestate.v2.inmobiliaria;
+package com.salesianos.triana.realestate.v2.inmobiliaria.controller;
 
 import com.salesianos.triana.realestate.v2.inmobiliaria.dto.GetInmobiliariasDto;
 import com.salesianos.triana.realestate.v2.inmobiliaria.dto.GetInmobiliasDtoConverter;

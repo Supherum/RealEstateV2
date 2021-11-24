@@ -1,5 +1,6 @@
 package com.salesianos.triana.realestate.v2.usuario.service;
 
+import com.salesianos.triana.realestate.v2.inmobiliaria.model.Inmobiliaria;
 import com.salesianos.triana.realestate.v2.shared.service.BaseService;
 import com.salesianos.triana.realestate.v2.usuario.dto.auth.UserRegisterDto;
 import com.salesianos.triana.realestate.v2.usuario.dto.auth.UserRegisterDtoConverter;
@@ -35,12 +36,25 @@ public class AuthService extends BaseService<Usuario, UUID, UsuarioRepository> i
 
     // Crea un nuevo Usuario
     public Usuario saveUsuario(UserRegisterDto dto, Rol rol){
-        if(dto.getPassword().contentEquals(dto.getPassword2()) ||
+        if(dto.getPassword().equals(dto.getPassword2()) ||
                 dto.getApellidos()!=null ||
                 dto.getEmail() != null ||
                 dto.getNick() != null ||
                 dto.getNombre()!=null){
            return save(userLoginDtoConverter.UserLoginDtoToUser(dto,rol));
+        }
+        return null;
+    }
+
+    public Usuario saveGestorConInmobiliaria(UserRegisterDto dto, Rol rol, Inmobiliaria i){
+        if(dto.getPassword().equals(dto.getPassword2()) ||
+                dto.getApellidos()!=null ||
+                dto.getEmail() != null ||
+                dto.getNick() != null ||
+                dto.getNombre()!=null){
+          Usuario u=  userLoginDtoConverter.UserLoginDtoToUser(dto,rol);
+          u.addInmobiliariaToUser(i);
+            return save(u);
         }
         return null;
     }
