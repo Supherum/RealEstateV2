@@ -2,7 +2,6 @@ package com.salesianos.triana.realestate.v2.usuario.controller;
 
 import com.salesianos.triana.realestate.v2.shared.dto.PropietarioViendaDto;
 import com.salesianos.triana.realestate.v2.shared.dto.PropietarioViviendaDtoConverter;
-import com.salesianos.triana.realestate.v2.shared.security.jwt.Autenticacion;
 import com.salesianos.triana.realestate.v2.usuario.dto.propietario.GetPropietarioDtoConverter;
 import com.salesianos.triana.realestate.v2.usuario.dto.propietario.PropietarioEscuetoDtoConverter;
 import com.salesianos.triana.realestate.v2.usuario.model.Rol;
@@ -13,22 +12,20 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.parser.Authorization;
+import lombok.extern.java.Log;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Log
 @RestController
 @RequiredArgsConstructor
 public class UsuarioController {
@@ -53,19 +50,20 @@ public class UsuarioController {
                     description = "No se encuentra el propietario",
                     content = @Content)
     })
-    @GetMapping("/propietario/{id}")
-    public ResponseEntity <PropietarioViendaDto> getDetailPropietario(@PathVariable("id") UUID id, Authentication authentication){
+    @GetMapping("/propietario/detalle/{id}")
+    public ResponseEntity <?> getDetailPropietario(@PathVariable("id") UUID id, @AuthenticationPrincipal Usuario u){
 
-        Usuario u = (Usuario) authentication.getPrincipal();
         Optional<Usuario> p = usuarioService.findById(id);
 
+        if(!u.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         if(p.isEmpty())
             return ResponseEntity.notFound().build();
-        if(u.getRol()==Rol.Administrador || id==u.getId()){
+        else{
             PropietarioViendaDto propietarioViendaDto = propietarioViviendaDtoConverter.propietarioToPropietarioVviendaDto(p.get());
             return ResponseEntity.ok().body(propietarioViendaDto);
         }
-            return ResponseEntity.notFound().build();
     }
 
 }
