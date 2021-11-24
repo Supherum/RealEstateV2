@@ -55,11 +55,10 @@ public class UsuarioController {
 
         Optional<Usuario> p = usuarioService.findById(id);
 
-        if(!u.getId().equals(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
         if(p.isEmpty())
             return ResponseEntity.notFound().build();
+        if(!u.getId().equals(id) && u.getRol()!=Rol.Administrador)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         else{
             PropietarioViendaDto propietarioViendaDto = propietarioViviendaDtoConverter.propietarioToPropietarioVviendaDto(p.get());
             return ResponseEntity.ok().body(propietarioViendaDto);
