@@ -1,5 +1,7 @@
 package com.salesianos.triana.realestate.v2.usuario.controller;
 
+import com.salesianos.triana.realestate.v2.inmobiliaria.model.Inmobiliaria;
+import com.salesianos.triana.realestate.v2.inmobiliaria.service.InmobiliariaService;
 import com.salesianos.triana.realestate.v2.shared.dto.PropietarioViendaDto;
 import com.salesianos.triana.realestate.v2.shared.dto.PropietarioViviendaDtoConverter;
 import com.salesianos.triana.realestate.v2.usuario.dto.propietario.GetPropietarioDto;
@@ -37,11 +39,18 @@ public class UsuarioController {
     private final GetPropietarioDtoConverter getPropietarioDtoConverter;
     private final PropietarioEscuetoDtoConverter propietarioEscuetoDtoConverter;
     private final PropietarioViviendaDtoConverter propietarioViviendaDtoConverter;
+    private final InmobiliariaService inmobiliariaService;
 
     @GetMapping("/propietario/")
     public ResponseEntity<List<GetPropietarioDto>> findPropietarios (){
 
         return ResponseEntity.ok(usuarioService.findPropietarios().stream().map(x->getPropietarioDtoConverter.propietarioToDto(x)).collect(Collectors.toList()));
+    }
+
+    @GetMapping("/gestores/")
+    public ResponseEntity<List<GetPropietarioDto>> findGestores (){
+
+        return ResponseEntity.ok(usuarioService.findGestores().stream().map(x->getPropietarioDtoConverter.propietarioToDto(x)).collect(Collectors.toList()));
     }
 
     @Operation(summary = "Devuelve los detalles de un propietario y su lista de viviendas")
@@ -93,5 +102,46 @@ public class UsuarioController {
         }
 
     }
+
+
+    @Operation(summary = "Borra un Gestor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha borrado con exito",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra el propietario",
+                    content = @Content)
+    })
+    @DeleteMapping("/inmobiliaria/{id}/gestor/")
+    public ResponseEntity<?> deleteGestor(@PathVariable("id")UUID id, @AuthenticationPrincipal Usuario u) {
+
+        Optional<Usuario> p = usuarioService.findById(id);
+        Boolean isGestor=false;
+
+        if(p.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        Optional<Inmobiliaria> i= inmobiliariaService.findById(p.get().getInmobiliaria().getId());
+
+        if(p.get().getRol()!=Rol.Gestor)
+            return ResponseEntity.badRequest().build();
+
+        if(u.getInmobiliaria()!=null){
+            if(i.get().getId().equals(u.getInmobiliaria().getId()))
+                isGestor=true;
+        }
+
+        if(!isGestor && u.getRol()!=Rol.Administrador)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        else{
+            usuarioService.delete(p.get());
+            return ResponseEntity.ok().build();
+        }
+
+    }
+
+
 
 }

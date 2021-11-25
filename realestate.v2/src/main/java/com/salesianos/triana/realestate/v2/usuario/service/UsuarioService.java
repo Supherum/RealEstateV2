@@ -15,4 +15,8 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
     public List<Usuario> findPropietarios (){
         return repository.findByRol(Rol.Propietario);
     }
+
+    public List<Usuario> findGestores(){
+        return repository.findByRol(Rol.Gestor);
+    }
 }
