@@ -21,4 +21,11 @@ public class InteresaDtoConverter {
                 .createDate(LocalDateTime.now())
                 .build();
     }
+
+    public Interesa interesaRegisterToInteresa(InteresaRegisterDto i){
+        return Interesa.builder()
+                .mensaje(i.getMensaje())
+                .createDate(LocalDateTime.now())
+        .build();
+    }
 }

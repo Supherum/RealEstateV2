@@ -10,6 +10,7 @@ import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import org.springframework.data.repository.cdi.Eager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,23 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "grafo-interesado-intereses-vivienda",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "listIntereses", subgraph = "subgrafo-interes")
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "subgrafo-interes",
+                                attributeNodes = {
+                                        @NamedAttributeNode("vivienda")
+                                }
+                        )
+                }
+        )
+})
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
@@ -72,7 +90,7 @@ public class Usuario implements Serializable, UserDetails {
     @Builder.Default
     private List<Vivienda> listVivienda=new ArrayList<>();
 
-    @OneToMany (mappedBy = "usuario")
+    @OneToMany (mappedBy = "usuario",fetch = FetchType.EAGER)
     @Builder.Default
     private List<Interesa> listIntereses=new ArrayList<>();
 

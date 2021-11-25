@@ -8,6 +8,7 @@ import com.salesianos.triana.realestate.v2.usuario.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,4 +23,6 @@ public class UsuarioService extends BaseService<Usuario, UUID, UsuarioRepository
     }
 
     public List<Usuario> findGestoresInmobiliaria(Inmobiliaria i){return repository.findByInmobiliaria(i);}
+
+    public Optional<Usuario> finUsuarioWithAll (UUID id){return  repository.findFirstById(id);}
 }
