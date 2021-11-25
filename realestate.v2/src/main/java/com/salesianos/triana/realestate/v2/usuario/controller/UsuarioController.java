@@ -53,6 +53,25 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.findGestores().stream().map(x->getPropietarioDtoConverter.propietarioToDto(x)).collect(Collectors.toList()));
     }
 
+    @GetMapping("/inmobiliaria/{id}/gestor")
+    public ResponseEntity<List<GetPropietarioDto>> findGestoresInmobiliaria (@PathVariable ("id") UUID id, @AuthenticationPrincipal Usuario u){
+
+        Optional<Inmobiliaria> i= inmobiliariaService.findById(id);
+        Boolean isGestor=false;
+
+        if(i.isEmpty())
+             return ResponseEntity.notFound().build();
+
+        if(u.getInmobiliaria()!=null){
+            if(i.get().getId().equals(u.getInmobiliaria().getId()))
+                isGestor=true;
+        }
+        if(!isGestor && u.getRol()!=Rol.Administrador)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        else
+            return ResponseEntity.ok(usuarioService.findGestoresInmobiliaria(i.get()).stream().map(x->getPropietarioDtoConverter.propietarioToDto(x)).collect(Collectors.toList()));
+    }
+
     @Operation(summary = "Devuelve los detalles de un propietario y su lista de viviendas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
