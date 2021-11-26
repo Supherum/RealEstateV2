@@ -17,4 +17,5 @@ public class ViviendaService extends BaseService<Vivienda, UUID, ViviendaReposit
     public List<Vivienda> viviendaConSpecification (Specification<Vivienda> spec){return  repository.findAll(spec);}
 
     public Optional<Vivienda> findViviendaAll (UUID id){return repository.finViviendaAll(id);}
+
 }

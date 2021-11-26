@@ -56,7 +56,7 @@ public class Vivienda implements Serializable {
     @ManyToOne
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "vivienda")
+    @OneToMany(mappedBy = "vivienda", orphanRemoval = true)
     @Builder.Default
     private List<Interesa> listIntereses=new ArrayList<>();
 
@@ -78,6 +78,10 @@ public class Vivienda implements Serializable {
     public void addUsuarioToVivienda(Usuario u){
         this.usuario=u;
         u.getListVivienda().add(this);
+    }
+    public void removeUsuarioToVivienda(Usuario u){
+        this.usuario=null;
+        u.getListVivienda().remove(this);
     }
 
 

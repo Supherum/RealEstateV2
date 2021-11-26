@@ -59,6 +59,11 @@ public class MainFake {
         authService.save(u4);
         authService.save(u5);
 
+        Usuario u16=authService.saveUsuario(UserRegisterDto.builder().nick("Pepa Pig").nombre("Pepa pig").apellidos("Ramirez").email("test@gmail.com").password("1234").password2("1234").build(), Rol.Propietario);
+        Usuario u17=authService.saveUsuario(UserRegisterDto.builder().nick("Julio").nombre("Julio").apellidos("Ramirez").email("test@gmail.com").password("1234").password2("1234").build(), Rol.Propietario);
+        Usuario u18=authService.saveUsuario(UserRegisterDto.builder().nick("Caracola").nombre("Caracola").apellidos("Ramirez").email("test@gmail.com").password("1234").password2("1234").build(), Rol.Propietario);
+        Usuario u19=authService.saveUsuario(UserRegisterDto.builder().nick("Viena").nombre("Viena").apellidos("Ramirez").email("test@gmail.com").password("1234").password2("1234").build(), Rol.Propietario);
+        Usuario u20=authService.saveUsuario(UserRegisterDto.builder().nick("Atun").nombre("Con pan").apellidos("Ramirez").email("test@gmail.com").password("1234").password2("1234").build(), Rol.Propietario);
 
         Usuario u6=authService.saveUsuario(UserRegisterDto.builder().nick("Marta").nombre("Marta").apellidos("Ramirez").email("test@gmail.com").password("1234").password2("1234").build(), Rol.Propietario);
         Usuario u7=authService.saveUsuario(UserRegisterDto.builder().nick("Ivan").nombre("Ivan").apellidos("Ramirez").email("test@gmail.com").password("1234").password2("1234").build(), Rol.Propietario);

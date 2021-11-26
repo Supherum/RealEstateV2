@@ -12,6 +12,8 @@ import com.salesianos.triana.realestate.v2.usuario.dto.propietario.PropietarioEs
 import com.salesianos.triana.realestate.v2.usuario.model.Rol;
 import com.salesianos.triana.realestate.v2.usuario.model.Usuario;
 import com.salesianos.triana.realestate.v2.usuario.service.UsuarioService;
+import com.salesianos.triana.realestate.v2.vivienda.model.Vivienda;
+import com.salesianos.triana.realestate.v2.vivienda.service.ViviendaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,6 +44,7 @@ public class UsuarioController {
     private final PropietarioViviendaDtoConverter propietarioViviendaDtoConverter;
     private final InmobiliariaService inmobiliariaService;
     private final GetInteresadosListaDtoConverter getInteresadosListaDtoConverter;
+    private final ViviendaService viviendaService;
 
 
     @GetMapping("/propietario")
@@ -113,12 +116,14 @@ public class UsuarioController {
     public ResponseEntity<?> deletePropietario(@PathVariable("id")UUID idProp, @AuthenticationPrincipal Usuario u) {
 
         Optional<Usuario> p = usuarioService.findById(idProp);
+        List<Vivienda> viviendas = viviendaService.findAll();
 
         if(p.isEmpty())
             return ResponseEntity.notFound().build();
         if(!u.getId().equals(idProp) && u.getRol()!=Rol.Administrador)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         else{
+            // este error de integridad referencial viene del proyecto anterior, sólo borra un propietario si está solo
             usuarioService.deleteById(idProp);
             return ResponseEntity.ok().build();
         }
