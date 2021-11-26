@@ -67,14 +67,14 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/auth/register/propietario").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/register/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/vivienda/{id}/meinteresa").hasRole("Propietario")
+                .antMatchers(HttpMethod.POST, "/vivienda/**/meinteresa").hasRole("Propietario")
                 .antMatchers(HttpMethod.POST, "/auth/register/gestor").hasRole("Administrador")
                 .antMatchers(HttpMethod.POST, "/auth/register/administrador").hasRole("Administrador")
-                .antMatchers(HttpMethod.DELETE, "/inmobiliaria/{id}").hasRole("Administrador")
-                .antMatchers(HttpMethod.POST, "/inmobiliaria/{id}/gestor").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/inmobiliaria/**").hasRole("Administrador")
+                .antMatchers(HttpMethod.POST, "/inmobiliaria/**/gestor").authenticated()
                 .antMatchers(HttpMethod.POST, "/inmobiliaria").hasRole("Administrador")
                 .antMatchers(HttpMethod.GET, "/interesado").hasRole("Administrador")
-                .antMatchers(HttpMethod.POST, "/vivienda/{id1}/inmobiliaria/{id2}").authenticated()
+                .antMatchers(HttpMethod.POST, "/vivienda/**/inmobiliaria/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/vivienda").permitAll()
                 .anyRequest().authenticated();
 

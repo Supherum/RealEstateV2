@@ -83,7 +83,7 @@ public class LoginController {
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(
                                 u.getNick(),
-                                u.getPassword()
+                                dto.getPassword()
                         )
                 );
 

@@ -66,7 +66,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nick\":\"Pr2323o\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"1234\",\r\n    \"password2\":\"1234\"\r\n}",
+							"raw": "{\r\n    \"nick\":\"Registro+Logueo\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"1234\",\r\n    \"password2\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -172,6 +172,17 @@
 				},
 				{
 					"name": "Registrar un gestor y su inmobiliada asociada",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -212,6 +223,17 @@
 				},
 				{
 					"name": "Registrar un administrador",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -409,6 +431,20 @@
 			"item": [
 				{
 					"name": "Lista propietarios",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"if(jsonData.length > 0) {\r",
+									"pm.collectionVariables.set(\"propietario\", jsonData[0].id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -438,6 +474,20 @@
 				},
 				{
 					"name": "Lista gestores",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"if(jsonData.length > 0) {\r",
+									"pm.collectionVariables.set(\"gestor\", jsonData[0].id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -481,7 +531,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/c0a83801-7d58-1fd7-817d-584fdb5d0002/gestor",
+							"raw": "http://localhost:8080/inmobiliaria/{{inmobiliaria}}/gestor",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -489,7 +539,7 @@
 							"port": "8080",
 							"path": [
 								"inmobiliaria",
-								"c0a83801-7d58-1fd7-817d-584fdb5d0002",
+								"{{inmobiliaria}}",
 								"gestor"
 							]
 						}
@@ -512,7 +562,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/propietario/detalle/c0a83801-7d53-1b72-817d-537727850002",
+							"raw": "http://localhost:8080/propietario/{{propietario}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -520,8 +570,7 @@
 							"port": "8080",
 							"path": [
 								"propietario",
-								"detalle",
-								"c0a83801-7d53-1b72-817d-537727850002"
+								"{{propietario}}"
 							]
 						}
 					},
@@ -543,7 +592,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/propietario/c0a83801-7d52-1bee-817d-52fc0e990001",
+							"raw": "http://localhost:8080/propietario/{{propietario}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -551,7 +600,7 @@
 							"port": "8080",
 							"path": [
 								"propietario",
-								"c0a83801-7d52-1bee-817d-52fc0e990001"
+								"{{propietario}}"
 							]
 						}
 					},
@@ -573,7 +622,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/c0a83801-7d58-11c4-817d-5841c8c20007/gestor",
+							"raw": "http://localhost:8080/inmobiliaria/{{gestor}}/gestor",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -581,7 +630,7 @@
 							"port": "8080",
 							"path": [
 								"inmobiliaria",
-								"c0a83801-7d58-11c4-817d-5841c8c20007",
+								"{{gestor}}",
 								"gestor"
 							]
 						}
@@ -600,7 +649,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"precio\":213,\r\n    \"descripcion\":\"hololo\",\r\n    \"tipo\":\"Venta\",\r\n    \"nombre\":\"Gustavo\",\r\n    \"metrosCuadrados\":232134,\r\n    \"direccion\":\"sadsad\",\r\n    \"poblacion\":\"mi casa\",\r\n    \"provincia\":\"22222222\",\r\n    \"codPostal\":\"4444444\",\r\n    \"latLng\":\"3333\",\r\n    \"tienePiscina\":true,\r\n    \"tieneGaraje\":false,\r\n    \"tieneAscensor\":true,\r\n    \"avatar\":\"aaaa\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":23,\r\n    \"nick\":\"ed8it\",\r\n    \"password\":\"papa\",\r\n    \"password2\":\"papa\"\r\n}",
+							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"precio\":213,\r\n    \"descripcion\":\"hololo\",\r\n    \"tipo\":\"Venta\",\r\n    \"nombre\":\"Gustavo\",\r\n    \"metrosCuadrados\":232134,\r\n    \"direccion\":\"sadsad\",\r\n    \"poblacion\":\"mi casa\",\r\n    \"provincia\":\"22222222\",\r\n    \"codPostal\":\"4444444\",\r\n    \"latLng\":\"3333\",\r\n    \"tienePiscina\":true,\r\n    \"tieneGaraje\":false,\r\n    \"tieneAscensor\":true,\r\n    \"avatar\":\"aaaa\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":23,\r\n    \"nick\":\"ejemplo\",\r\n    \"password\":\"1234\",\r\n    \"password2\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -646,7 +695,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/vivienda/c0a83801-7d53-1977-817d-5339bd390002/inmobiliaria",
+							"raw": "http://localhost:8080/vivienda/{{vivienda}}/inmobiliaria",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -654,7 +703,7 @@
 							"port": "8080",
 							"path": [
 								"vivienda",
-								"c0a83801-7d53-1977-817d-5339bd390002",
+								"{{vivienda}}",
 								"inmobiliaria"
 							]
 						}
@@ -663,6 +712,20 @@
 				},
 				{
 					"name": "Lista Viviendas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"if(jsonData.content.length > 0) {\r",
+									"pm.collectionVariables.set(\"vivienda\", jsonData.content[0].id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -718,7 +781,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/vivienda/c0a83801-7d4e-10f0-817d-4e5125140002",
+							"raw": "http://localhost:8080/vivienda/{{vivienda}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -726,7 +789,7 @@
 							"port": "8080",
 							"path": [
 								"vivienda",
-								"c0a83801-7d4e-10f0-817d-4e5125140002"
+								"{{vivienda}}"
 							]
 						}
 					},
@@ -757,7 +820,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/vivienda/c0a83801-7d53-192d-817d-53094efc0002",
+							"raw": "http://localhost:8080/vivienda/{{vivienda}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -765,7 +828,7 @@
 							"port": "8080",
 							"path": [
 								"vivienda",
-								"c0a83801-7d53-192d-817d-53094efc0002"
+								"{{vivienda}}"
 							]
 						}
 					},
@@ -787,7 +850,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/vivienda/c0a83801-7d54-1cfc-817d-541d8ab70002",
+							"raw": "http://localhost:8080/vivienda/{{vivienda}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -795,7 +858,7 @@
 							"port": "8080",
 							"path": [
 								"vivienda",
-								"c0a83801-7d54-1cfc-817d-541d8ab70002"
+								"{{vivienda}}"
 							]
 						}
 					},
@@ -807,7 +870,21 @@
 			"name": "Inmobiliaria",
 			"item": [
 				{
-					"name": "Encontrar todas las inmobiliarias",
+					"name": "Lista inmobiliarias",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"if(jsonData.content.length > 0) {\r",
+									"pm.collectionVariables.set(\"inmobiliaria\", jsonData.content[0].id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -851,7 +928,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/vivienda/c0a83801-7d53-1977-817d-5339bd390002/inmobiliaria/c0a83801-7d53-1122-817d-53918dfc0001",
+							"raw": "http://localhost:8080/vivienda/{{vivienda}}/inmobiliaria/{{inmobiliaria}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -859,9 +936,9 @@
 							"port": "8080",
 							"path": [
 								"vivienda",
-								"c0a83801-7d53-1977-817d-5339bd390002",
+								"{{vivienda}}",
 								"inmobiliaria",
-								"c0a83801-7d53-1122-817d-53918dfc0001"
+								"{{inmobiliaria}}"
 							]
 						}
 					},
@@ -933,7 +1010,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/c0a83801-7d54-1496-817d-54159bb60002",
+							"raw": "http://localhost:8080/inmobiliaria/{{inmobiliaria}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -941,7 +1018,7 @@
 							"port": "8080",
 							"path": [
 								"inmobiliaria",
-								"c0a83801-7d54-1496-817d-54159bb60002"
+								"{{inmobiliaria}}"
 							]
 						}
 					},
@@ -972,7 +1049,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/2",
+							"raw": "http://localhost:8080/inmobiliaria/{{inmobiliaria}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -980,7 +1057,7 @@
 							"port": "8080",
 							"path": [
 								"inmobiliaria",
-								"2"
+								"{{inmobiliaria}}"
 							]
 						}
 					},
@@ -1016,7 +1093,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/vivienda/c0a83801-7d59-13cd-817d-5953d5ab0015/meinteresa",
+							"raw": "http://localhost:8080/vivienda/{{vivienda}}/meinteresa",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1024,7 +1101,7 @@
 							"port": "8080",
 							"path": [
 								"vivienda",
-								"c0a83801-7d59-13cd-817d-5953d5ab0015",
+								"{{vivienda}}",
 								"meinteresa"
 							]
 						}
@@ -1056,7 +1133,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/vivienda/c0a83801-7d58-11ec-817d-58d1f5000015/meinteresa",
+							"raw": "http://localhost:8080/vivienda/{{vivienda}}/meinteresa",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1064,7 +1141,7 @@
 							"port": "8080",
 							"path": [
 								"vivienda",
-								"c0a83801-7d58-11ec-817d-58d1f5000015",
+								"{{vivienda}}",
 								"meinteresa"
 							]
 						}
@@ -1140,14 +1217,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/interesado",
+							"raw": "http://localhost:8080/interesado/{{propietario}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"interesado"
+								"interesado",
+								"{{propietario}}"
 							]
 						}
 					},
@@ -1181,7 +1259,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/vivienda/top",
+							"raw": "http://localhost:8080/vivienda/top?n=10",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1190,6 +1268,12 @@
 							"path": [
 								"vivienda",
 								"top"
+							],
+							"query": [
+								{
+									"key": "n",
+									"value": "10"
+								}
 							]
 						}
 					},
@@ -1213,6 +1297,22 @@
 		},
 		{
 			"key": "registrado",
+			"value": ""
+		},
+		{
+			"key": "propietario",
+			"value": ""
+		},
+		{
+			"key": "gestor",
+			"value": ""
+		},
+		{
+			"key": "vivienda",
+			"value": ""
+		},
+		{
+			"key": "inmobiliaria",
 			"value": ""
 		}
 	]
