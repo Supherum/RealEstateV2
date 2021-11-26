@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "7db672d3-7f42-419a-beda-421fddfed328",
+		"_postman_id": "8936410f-f0c2-4303-9e5a-235b258afeb7",
 		"name": "RealEstateV2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -8,6 +8,87 @@
 		{
 			"name": "Auth",
 			"item": [
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{registrado}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password1\":\"nueva\",\r\n    \"password2\":\"nueva\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/change/password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"change",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrarse y logearse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nick\":\"Pr2323o\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"1234\",\r\n    \"password2\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/register/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"register",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Registrar un propietario",
 					"event": [
@@ -26,7 +107,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nick\":\"Propietario\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"propietario\",\r\n    \"password2\":\"propietario\"\r\n}",
+							"raw": "{\r\n    \"nick\":\"Propietario\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"1234\",\r\n    \"password2\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -66,7 +147,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nick\":\"gestor\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"papa\",\r\n    \"password2\":\"papa\"\r\n}",
+							"raw": "{\r\n    \"nick\":\"gestor\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"1234\",\r\n    \"password2\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -106,7 +187,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nick\":\"gestor23\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"papa\",\r\n    \"password2\":\"papa\"\r\n}",
+							"raw": "{\r\n    \"nick\":\"gestor23\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"1234\",\r\n    \"password2\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -146,7 +227,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nick\":\"admin2\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"papa\",\r\n    \"password2\":\"papa\"\r\n}",
+							"raw": "{\r\n    \"nick\":\"admin2\",\r\n    \"nombre\":\"paco\",\r\n    \"apellidos\":\"fernandez\",\r\n    \"email\":\"hola@gmail.com\",\r\n    \"password\":\"1234\",\r\n    \"password2\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -229,7 +310,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nick\":\"Propietario\",\r\n    \"password\":\"propietario\"\r\n}",
+							"raw": "{\r\n    \"nick\":\"Marta\",\r\n    \"password\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -270,7 +351,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nick\":\"gestor23\",\r\n    \"password\":\"papa\"\r\n}",
+							"raw": "{\r\n    \"nick\":\"Juan\",\r\n    \"password\":\"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -342,15 +423,74 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/propietario/",
+							"raw": "http://localhost:8080/propietario",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"propietario",
-								""
+								"propietario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lista gestores",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{registrado}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/gestores",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gestores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lista gestores de una inmobiliaria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{registrado}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/inmobiliaria/c0a83801-7d58-1fd7-817d-584fdb5d0002/gestor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"inmobiliaria",
+								"c0a83801-7d58-1fd7-817d-584fdb5d0002",
+								"gestor"
 							]
 						}
 					},
@@ -416,6 +556,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Borrar un Gestor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{registrado}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/inmobiliaria/c0a83801-7d58-11c4-817d-5841c8c20007/gestor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"inmobiliaria",
+								"c0a83801-7d58-11c4-817d-5841c8c20007",
+								"gestor"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -429,7 +600,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"precio\":213,\r\n    \"descripcion\":\"hololo\",\r\n    \"tipo\":\"Venta\",\r\n    \"nombre\":\"Gustavo\",\r\n    \"metrosCuadrados\":232134,\r\n    \"direccion\":\"sadsad\",\r\n    \"poblacion\":\"mi casa\",\r\n    \"provincia\":\"22222222\",\r\n    \"codPostal\":\"4444444\",\r\n    \"latLng\":\"3333\",\r\n    \"tienePiscina\":true,\r\n    \"tieneGaraje\":false,\r\n    \"tieneAscensor\":true,\r\n    \"avatar\":\"aaaa\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":23,\r\n    \"nick\":\"edit\",\r\n    \"password\":\"papa\",\r\n    \"password2\":\"papa\"\r\n}",
+							"raw": "{\r\n    \"titulo\":\"titulo\",\r\n    \"precio\":213,\r\n    \"descripcion\":\"hololo\",\r\n    \"tipo\":\"Venta\",\r\n    \"nombre\":\"Gustavo\",\r\n    \"metrosCuadrados\":232134,\r\n    \"direccion\":\"sadsad\",\r\n    \"poblacion\":\"mi casa\",\r\n    \"provincia\":\"22222222\",\r\n    \"codPostal\":\"4444444\",\r\n    \"latLng\":\"3333\",\r\n    \"tienePiscina\":true,\r\n    \"tieneGaraje\":false,\r\n    \"tieneAscensor\":true,\r\n    \"avatar\":\"aaaa\",\r\n    \"numBanos\":2,\r\n    \"numHabitaciones\":23,\r\n    \"nick\":\"ed8it\",\r\n    \"password\":\"papa\",\r\n    \"password2\":\"papa\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -437,15 +608,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/vivienda/",
+							"raw": "http://localhost:8080/vivienda",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"vivienda",
-								""
+								"vivienda"
 							]
 						}
 					},
@@ -519,15 +689,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/vivienda/",
+							"raw": "http://localhost:8080/vivienda",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"vivienda",
-								""
+								"vivienda"
 							]
 						}
 					},
@@ -653,15 +822,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/",
+							"raw": "http://localhost:8080/inmobiliaria",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
-								""
+								"inmobiliaria"
 							]
 						}
 					},
@@ -700,36 +868,6 @@
 					"response": []
 				},
 				{
-					"name": "Obtener Todas",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{registrado}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"inmobiliaria",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Nueva inmobiliaria",
 					"request": {
 						"auth": {
@@ -754,15 +892,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/inmobiliaria/",
+							"raw": "http://localhost:8080/inmobiliaria",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"inmobiliaria",
-								""
+								"inmobiliaria"
 							]
 						}
 					},
@@ -835,13 +972,224 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_BASE}}/inmobiliaria/2",
+							"raw": "http://localhost:8080/inmobiliaria/2",
+							"protocol": "http",
 							"host": [
-								"{{API_BASE}}"
+								"localhost"
 							],
+							"port": "8080",
 							"path": [
 								"inmobiliaria",
 								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Interesa",
+			"item": [
+				{
+					"name": "Agrego un me interesa a una vivienda con un interesado logueado",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{registrado}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"mensaje\":\"Me gusta esta casa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vivienda/c0a83801-7d59-13cd-817d-5953d5ab0015/meinteresa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vivienda",
+								"c0a83801-7d59-13cd-817d-5953d5ab0015",
+								"meinteresa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borro un interesa de una vivienda",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{registrado}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vivienda/c0a83801-7d58-11ec-817d-58d1f5000015/meinteresa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vivienda",
+								"c0a83801-7d58-11ec-817d-58d1f5000015",
+								"meinteresa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Interesados",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{registrado}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/interesado",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"interesado"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detalles de un interesado",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{registrado}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/interesado",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"interesado"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Top viviendas",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{registrado}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vivienda/top",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vivienda",
+								"top"
 							]
 						}
 					},
