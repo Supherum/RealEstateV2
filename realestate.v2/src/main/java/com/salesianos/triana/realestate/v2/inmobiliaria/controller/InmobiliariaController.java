@@ -44,7 +44,7 @@ public class InmobiliariaController {
                     description = "No se ha podido crear la inmobiliaria",
                     content = @Content)
     })
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Inmobiliaria> addInmo(@RequestBody GetInmobiliariasDto i){
         if (i.getNombre().isEmpty() || i.getEmail().isEmpty() || i.getTelefono().isEmpty())
             return ResponseEntity.badRequest().build();
@@ -62,7 +62,7 @@ public class InmobiliariaController {
                     description = "No se encuentra la lista de inmobiliarias",
                     content = @Content)
     })
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getListInmobiliaria(@PageableDefault(size = 9 ,page = 0) Pageable p) {
         Page<Inmobiliaria> lista = inmobiliariaService.findAll(p);
         if (lista.isEmpty()) {

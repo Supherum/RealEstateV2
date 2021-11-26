@@ -5,6 +5,8 @@ import com.salesianos.triana.realestate.v2.interesa.dto.InteresaDtoConverter;
 import com.salesianos.triana.realestate.v2.interesa.dto.InteresaRegisterDto;
 import com.salesianos.triana.realestate.v2.interesa.model.Interesa;
 import com.salesianos.triana.realestate.v2.interesa.service.InteresaService;
+import com.salesianos.triana.realestate.v2.usuario.dto.propietario.GetPropietarioDto;
+import com.salesianos.triana.realestate.v2.usuario.dto.propietario.GetPropietarioDtoConverter;
 import com.salesianos.triana.realestate.v2.usuario.model.Rol;
 import com.salesianos.triana.realestate.v2.usuario.model.Usuario;
 import com.salesianos.triana.realestate.v2.usuario.service.UsuarioService;
@@ -20,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class InteresaController {
     private final UsuarioService usuarioService;
     private final InteresaService interesaService;
     private final InteresaDtoConverter interesaDtoConverter;
+    private final GetPropietarioDtoConverter propietarioDtoConverter;
 
     @Operation(summary = "Añade un nuevo interesa con un interesado existente")
     @ApiResponses(value = {
@@ -51,7 +53,7 @@ public class InteresaController {
                     }
             )
     })
-    @PostMapping("/vivienda/{id1}/meinteresa/")
+    @PostMapping("/vivienda/{id1}/meinteresa")
     public ResponseEntity<InteresaDto> addInteresadoVivienda(@PathVariable("id1") UUID idVivienda,
                                                              @AuthenticationPrincipal Usuario u,
                                                              @RequestBody InteresaRegisterDto iDto){
@@ -78,7 +80,7 @@ public class InteresaController {
                     responseCode = "200",
                     content = @Content)
     })
-    @DeleteMapping("vivienda/{id1}/meinteresa/")
+    @DeleteMapping("vivienda/{id1}/meinteresa")
     public ResponseEntity<?> deleteMeInteresa(
             @Parameter(description = "id de la vivienda") @PathVariable UUID id1, @AuthenticationPrincipal Usuario u) {
 
@@ -100,5 +102,25 @@ public class InteresaController {
 
             return ResponseEntity.ok().build();
         }
+    }
+
+    @Operation(summary = "Devuelve los interesados de una vivienda")
+    @ApiResponses(value = {
+            @ApiResponse(description = "Lista de todos los interesados",
+                    responseCode = "200",
+                    content = @Content)
+    })
+    @GetMapping("/interesado")
+    public ResponseEntity<List<GetPropietarioDto>> buscaInteresados() {
+
+        List<Usuario> listaUsuarios = usuarioService.findAll();
+        // Se que debido a que está el tipo EAGER crea una recursividad, pero debido
+        // al tiempo para implementar la seguridad y además tocar los controladores este
+        // por desgracia se quedará dando usuarios que no deberían de estar aunque el método
+        // está bien si quitamos la recursividad. Un grafo de entidad hubiera estado bien
+        listaUsuarios.stream().filter(x->x.getListIntereses().size()>0).collect(Collectors.toList());
+        List<GetPropietarioDto> lista=listaUsuarios.stream().map(x->propietarioDtoConverter.propietarioToDto(x) ).collect(Collectors.toList());
+            return ResponseEntity.ok().body(lista);
+
     }
 }

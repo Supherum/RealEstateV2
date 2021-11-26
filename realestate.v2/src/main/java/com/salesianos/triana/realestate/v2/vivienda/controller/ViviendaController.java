@@ -5,6 +5,7 @@ import com.salesianos.triana.realestate.v2.inmobiliaria.service.InmobiliariaServ
 import com.salesianos.triana.realestate.v2.interesa.model.Interesa;
 import com.salesianos.triana.realestate.v2.interesa.service.InteresaService;
 import com.salesianos.triana.realestate.v2.interesa.dto.InteresaDtoConverter;
+import com.salesianos.triana.realestate.v2.usuario.dto.interesado.GetInteresadosListaDto;
 import com.salesianos.triana.realestate.v2.usuario.model.Rol;
 import com.salesianos.triana.realestate.v2.usuario.model.Usuario;
 import com.salesianos.triana.realestate.v2.usuario.service.UsuarioService;
@@ -12,7 +13,9 @@ import com.salesianos.triana.realestate.v2.vivienda.dto.*;
 import com.salesianos.triana.realestate.v2.vivienda.model.Vivienda;
 import com.salesianos.triana.realestate.v2.vivienda.service.ViviendaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,7 +65,7 @@ public class ViviendaController {
                     content = @Content)
     })
 
-    @PostMapping ("/")
+    @PostMapping ("")
     public ResponseEntity<ViviendaDetalleDto> addVivienda(@RequestBody ViviendaPropietarioDto dto){
         Vivienda v=viviendaPropietarioConverterDto.getVivienda(dto);
         Usuario p= viviendaPropietarioConverterDto.getPropietario(dto);
@@ -87,7 +90,7 @@ public class ViviendaController {
                     description = "No se encuentra la lista de viviendas",
                     content = @Content)
     })
-    @GetMapping ("/")
+    @GetMapping ("")
     public ResponseEntity<?> getAllViviendas ( @PageableDefault(size = 9,page = 0) Pageable pageable){
         Page<Vivienda> lista=viviendaService.findAll(pageable);
         if(lista.isEmpty())
@@ -242,6 +245,37 @@ public class ViviendaController {
             viviendaService.deleteById(id);
             return ResponseEntity.ok().build();
         }
+    }
+
+    @Operation(summary = "Lista las viviendas n con mas interesados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404",
+                    description = "No se han encontrado viviendas",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Se han introducido mal los parametros",
+                    content = @Content),
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado las viviendas deseadas",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = GetInteresadosListaDto.class)))
+                    })
+    })
+    @GetMapping(value = "/top", params = {"n"})
+    public ResponseEntity<?> topViviendas(
+            @RequestParam(defaultValue = "5") long n
+    ) {
+        List<Vivienda> lista = viviendaService.findAll();
+        if(lista.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        if(n<1) {
+            ResponseEntity.badRequest().build();
+        }
+        List<ViviendasTopDto> dtos = lista.stream().map(viviendasTopDtoConverter::viviendaToViviendasTopDto).sorted(
+                (v1, v2) -> v2.getNumeroInteresados() - v1.getNumeroInteresados()).limit(n).toList();
+        return ResponseEntity.ok(dtos);
     }
 
 }

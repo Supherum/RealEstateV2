@@ -4,6 +4,8 @@ import com.salesianos.triana.realestate.v2.inmobiliaria.model.Inmobiliaria;
 import com.salesianos.triana.realestate.v2.inmobiliaria.service.InmobiliariaService;
 import com.salesianos.triana.realestate.v2.shared.dto.PropietarioViendaDto;
 import com.salesianos.triana.realestate.v2.shared.dto.PropietarioViviendaDtoConverter;
+import com.salesianos.triana.realestate.v2.usuario.dto.interesado.GetInteresadosListaDto;
+import com.salesianos.triana.realestate.v2.usuario.dto.interesado.GetInteresadosListaDtoConverter;
 import com.salesianos.triana.realestate.v2.usuario.dto.propietario.GetPropietarioDto;
 import com.salesianos.triana.realestate.v2.usuario.dto.propietario.GetPropietarioDtoConverter;
 import com.salesianos.triana.realestate.v2.usuario.dto.propietario.PropietarioEscuetoDtoConverter;
@@ -37,17 +39,18 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
     private final GetPropietarioDtoConverter getPropietarioDtoConverter;
-    private final PropietarioEscuetoDtoConverter propietarioEscuetoDtoConverter;
     private final PropietarioViviendaDtoConverter propietarioViviendaDtoConverter;
     private final InmobiliariaService inmobiliariaService;
+    private final GetInteresadosListaDtoConverter getInteresadosListaDtoConverter;
 
-    @GetMapping("/propietario/")
+
+    @GetMapping("/propietario")
     public ResponseEntity<List<GetPropietarioDto>> findPropietarios (){
 
         return ResponseEntity.ok(usuarioService.findPropietarios().stream().map(x->getPropietarioDtoConverter.propietarioToDto(x)).collect(Collectors.toList()));
     }
 
-    @GetMapping("/gestores/")
+    @GetMapping("/gestores")
     public ResponseEntity<List<GetPropietarioDto>> findGestores (){
 
         return ResponseEntity.ok(usuarioService.findGestores().stream().map(x->getPropietarioDtoConverter.propietarioToDto(x)).collect(Collectors.toList()));
@@ -81,7 +84,7 @@ public class UsuarioController {
                     description = "No se encuentra el propietario",
                     content = @Content)
     })
-    @GetMapping("/propietario/detalle/{id}")
+    @GetMapping("/propietario/{id}")
     public ResponseEntity <?> getDetailPropietario(@PathVariable("id") UUID id, @AuthenticationPrincipal Usuario u){
 
         Optional<Usuario> p = usuarioService.findById(id);
@@ -132,7 +135,7 @@ public class UsuarioController {
                     description = "No se encuentra el propietario",
                     content = @Content)
     })
-    @DeleteMapping("/inmobiliaria/{id}/gestor/")
+    @DeleteMapping("/inmobiliaria/{id}/gestor")
     public ResponseEntity<?> deleteGestor(@PathVariable("id")UUID id, @AuthenticationPrincipal Usuario u) {
 
         Optional<Usuario> p = usuarioService.findById(id);
@@ -159,6 +162,30 @@ public class UsuarioController {
             return ResponseEntity.ok().build();
         }
 
+    }
+
+
+    @Operation(summary = "Devuelve los detalles de un interesado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha encontrado el interesado",
+                    content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se encuentra el intertesado",
+                    content = @Content)
+    })
+    @GetMapping("/interesado/{id}")
+    public ResponseEntity <GetInteresadosListaDto> getDetailInteresado(@PathVariable("id") UUID id, @AuthenticationPrincipal Usuario u){
+
+        Optional<Usuario> p = usuarioService.findById(id);
+
+        if(p.isEmpty())
+            return ResponseEntity.notFound().build();
+        if(!u.getId().equals(id) && u.getRol()!=Rol.Administrador)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        else{
+            return ResponseEntity.ok().body(getInteresadosListaDtoConverter.interesadoToGetInteresadosListaDto(p.get()));
+        }
     }
 
 

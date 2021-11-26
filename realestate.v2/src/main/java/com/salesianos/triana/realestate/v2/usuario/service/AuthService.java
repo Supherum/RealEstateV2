@@ -15,13 +15,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service("userDetailsService")
 @RequiredArgsConstructor
 public class AuthService extends BaseService<Usuario, UUID, UsuarioRepository> implements UserDetailsService {
 
-    private final PasswordEncoder codificador;
     private final UsuarioRepository usuarioRepository;
     private final UserRegisterDtoConverter userLoginDtoConverter;
 
@@ -32,6 +32,9 @@ public class AuthService extends BaseService<Usuario, UUID, UsuarioRepository> i
                 .orElseThrow(()-> new UsernameNotFoundException(nick + " no encontrado"));
     }
 
+    public Optional<Usuario> findByNick(String nick){
+        return usuarioRepository.findFirstByNick(nick);
+    }
 
 
     // Crea un nuevo Usuario
