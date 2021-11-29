@@ -90,7 +90,7 @@ public class Usuario implements Serializable, UserDetails {
     @Builder.Default
     private List<Vivienda> listVivienda=new ArrayList<>();
 
-    @OneToMany (mappedBy = "usuario",fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "usuario")
     @Builder.Default
     private List<Interesa> listIntereses=new ArrayList<>();
 

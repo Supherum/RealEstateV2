@@ -10,6 +10,8 @@ import com.salesianos.triana.realestate.v2.usuario.dto.propietario.GetPropietari
 import com.salesianos.triana.realestate.v2.usuario.model.Rol;
 import com.salesianos.triana.realestate.v2.usuario.model.Usuario;
 import com.salesianos.triana.realestate.v2.usuario.service.UsuarioService;
+import com.salesianos.triana.realestate.v2.vivienda.dto.ViviendaDetalleDto;
+import com.salesianos.triana.realestate.v2.vivienda.dto.ViviendaDetalleDtoConverter;
 import com.salesianos.triana.realestate.v2.vivienda.model.Vivienda;
 import com.salesianos.triana.realestate.v2.vivienda.service.ViviendaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +41,7 @@ public class InteresaController {
     private final InteresaService interesaService;
     private final InteresaDtoConverter interesaDtoConverter;
     private final GetPropietarioDtoConverter propietarioDtoConverter;
+    private final ViviendaDetalleDtoConverter viviendaDetalleDtoConverter;
 
     @Operation(summary = "Añade un nuevo interesa con un interesado existente")
     @ApiResponses(value = {
@@ -122,5 +125,17 @@ public class InteresaController {
         List<GetPropietarioDto> lista=listaUsuarios.stream().map(x->propietarioDtoConverter.propietarioToDto(x) ).collect(Collectors.toList());
             return ResponseEntity.ok().body(lista);
 
+    }
+
+    @GetMapping ("/vivienda/meinteresan")
+    public ResponseEntity<List<ViviendaDetalleDto>> misViviendasInteresadas(@AuthenticationPrincipal Usuario u){
+        List<Vivienda>listaViviendas=viviendaService.findAll();
+        List<Interesa> listaInteresa=interesaService.findAll();
+
+        List<Interesa> lista= listaInteresa.stream().filter(x-> x.getId().getUsuario_id().equals(u.getId())).collect(Collectors.toList());
+        List<UUID> listaViviendasID= lista.stream().map(x->x.getId().getVivienda_id()).collect(Collectors.toList());
+        List<Vivienda> listaFinish= listaViviendas.stream().filter(x-> listaInteresa.contains(x.getId())).collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(listaFinish.stream().map(x->viviendaDetalleDtoConverter.viviendaToDetalleDto(x)).collect(Collectors.toList()));
     }
 }

@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Log
 @RestController
@@ -277,6 +278,14 @@ public class ViviendaController {
                 (v1, v2) -> v2.getNumeroInteresados() - v1.getNumeroInteresados()).limit(n).toList();
         return ResponseEntity.ok(dtos);
     }
+
+    @GetMapping("/mias")
+    public ResponseEntity <List<?>> misViviendas (@AuthenticationPrincipal Usuario u){
+
+        return ResponseEntity.ok().body( viviendaService.findViviendasUsuario(u).stream().map(x->viviendaDetalleDtoConverter.viviendaToDetalleDto(x)).collect(Collectors.toList()));
+
+    }
+
 
 }
 

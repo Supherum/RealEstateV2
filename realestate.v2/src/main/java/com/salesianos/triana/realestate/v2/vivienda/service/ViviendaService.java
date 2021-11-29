@@ -2,6 +2,7 @@ package com.salesianos.triana.realestate.v2.vivienda.service;
 
 
 import com.salesianos.triana.realestate.v2.shared.service.BaseService;
+import com.salesianos.triana.realestate.v2.usuario.model.Usuario;
 import com.salesianos.triana.realestate.v2.vivienda.model.Vivienda;
 import com.salesianos.triana.realestate.v2.vivienda.repository.ViviendaRepository;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,4 +19,5 @@ public class ViviendaService extends BaseService<Vivienda, UUID, ViviendaReposit
 
     public Optional<Vivienda> findViviendaAll (UUID id){return repository.finViviendaAll(id);}
 
+    public List<Vivienda> findViviendasUsuario (Usuario u){return  repository.findViviendasUsuario(u);}
 }
